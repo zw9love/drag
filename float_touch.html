@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{
+        padding: 0;
+        margin:0;
+        list-style: none;
+    }
+    body,html{
+        height:100%;
+    }
+    ul{
+        width:100%;
+        position: relative;
+        overflow: hidden;
+    }
+    ul li{
+        width:25%;
+        box-sizing:border-box;
+        border:10px solid #fff;
+        float: left;
+        cursor: pointer;
+        text-align: center;
+        line-height: 30px;
+        height: 50px;   
+    }
+
+    .move{
+        width:100%;
+        height:100%;
+        background:yellowgreen;
+        z-index: 1;
+    }
+
+
+
+
+
+    </style>
+    <script src="js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <ul>
+        <li>
+           <div class="move">傻壮1</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮2</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮3</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮4</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮5</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮6</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮7</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮8</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮9</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮10</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮11</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮12</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮13</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮14</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮15</div>
+
+        </li>
+        <li>
+           <div class="move">傻壮16</div>
+
+        </li>
+
+    </ul>
+    <script>
+        var len=$('ul li').length;
+        var width=$('ul li .move').width();
+        var height=$('ul li .move').innerHeight();
+        var li_width=$('ul li').eq(0).outerWidth();
+        var li_height=$('ul li').outerHeight();
+        var ul_width=$('ul').width();
+        var ul_height=$('ul').height();
+        var screen_width=$(window).width();
+        var num=Math.ceil(screen_width/li_width);
+        var avg=screen_width/num;
+        // console.log(avg);
+        var lock=true;
+        
+        //当鼠标按下，还没抬起的那一刻
+        $('ul li .move').on('touchstart',function(e){
+            // console.log(e.originalEvent.changedTouches[0]);
+            if(e.originalEvent.changedTouches.length>1) return;
+            var self=$(this);
+            var x1=e.originalEvent.changedTouches[0].clientX;
+            var y1=e.originalEvent.changedTouches[0].clientY;
+            var l=$(this).parent().offset().left;
+            var t=$(this).parent().offset().top;
+            var dis_x=x1-l;
+            var dis_y=y1-t;
+            var myNum=$(this).parent().index();
+            $(this).css({
+                'z-index':2,
+                'width':width,
+                'height':height,
+                'padding-top':0,
+                'left':l+10,
+                'top':t+10,
+                'position':'absolute'
+            });
+
+            $(this).parent().addClass('temp');
+
+
+            e.preventDefault();
+
+            //当鼠标按下之后在document上移动的时候
+            $(this).on('touchmove',function(e){
+                if(!lock) return;
+                if(e.originalEvent.changedTouches.length>1) return;
+                // console.log(e)
+                var x2=e.originalEvent.changedTouches[0].clientX;
+                var y2=e.originalEvent.changedTouches[0].clientY;
+                var bili_x=Math.ceil(x2/li_width)-1;
+                var bili_y=Math.ceil(y2/li_height)-1;
+                var n=num*bili_y+bili_x;
+                if(n<len){
+                    // console.log(n);
+                    if(n==0 && myNum==0){
+                        //
+                    }
+                    else if(n==0 && myNum!=n){
+                        $('ul').prepend(self.parent());
+                        myNum=$('.temp').index();
+                    }
+                    else{
+
+
+                        if(n>myNum){
+                            // console.log('上');
+                            if(n+1==len){
+                                $('ul').append(self.parent());
+                            }else{
+                                $('ul li').eq(n+1).before(self.parent());
+                            }
+
+                            self.parent().css({
+                                'width':0
+                            });
+
+                            self.parent().stop().animate({
+                                'width':avg
+                            },'slow',function(){
+                                lock=true;
+                            });
+
+                            myNum=$('.temp').index();
+                        }else{
+                            // console.log('下');
+                            $('ul li').eq(n-1).after(self.parent());
+
+                            if(n!=myNum){
+                            self.parent().css({
+                                'width':0
+                            });
+
+                            self.parent().stop().animate({
+                                'width':avg
+                            },'slow',function(){
+                                lock=true;
+                            });
+                            }
+
+                            myNum=$('.temp').index();
+                        }
+
+                        // console.log(1);
+
+                        
+                    
+                    }
+                    // console.log(n,myNum);
+                }
+
+                self.css({
+                    'left':x2-dis_x+10,
+                    'top':y2-dis_y+10
+                });
+                e.preventDefault();
+            });
+
+            $(this).on('touchend',function(){
+                $(this).off('touchmove');
+                $(this).off('touchend');
+                self.attr('style','');
+                self.parent().removeClass('temp');
+
+            });
+        });
+    </script>
+</body>
+</html>

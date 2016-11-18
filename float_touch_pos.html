@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{
+        padding: 0;
+        margin:0;
+        list-style: none;
+    }
+    body,html{
+        height:100%;
+    }
+    ul{
+        width:100%;
+        position: relative;
+    }
+    ul li{
+        width:25%;
+        box-sizing:border-box;
+        border:10px solid #fff;
+        float: left;
+        cursor: pointer;
+        text-align: center;
+        line-height: 30px;
+        height: 50px;   
+        /*background:red;*/
+    }
+
+    .move{
+        background:yellowgreen;
+        z-index: 1;
+        position:absolute;
+    }
+
+
+
+
+
+    </style>
+    <script src="js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <ul>
+        <li></li>
+        <div class="move">傻壮1</div>
+        <li></li>
+        <div class="move">傻壮2</div>
+        <li></li>
+        <div class="move">傻壮3</div>
+        <li></li>
+        <div class="move">傻壮4</div>
+        <li></li>
+        <div class="move">傻壮5</div>
+        <li></li>
+        <div class="move">傻壮6</div>
+        <li></li>
+        <div class="move">傻壮7</div>
+        <li></li>
+        <div class="move">傻壮8</div>
+        <li></li>
+        <div class="move">傻壮9</div>
+        <li></li>
+        <div class="move">傻壮10</div>
+        <li></li>
+        <div class="move">傻壮11</div>
+        <li></li>
+        <div class="move">傻壮12</div>
+        <li></li>
+        <div class="move">傻壮13</div>
+        <li></li>
+        <div class="move">傻壮14</div>
+        <li></li>
+        <div class="move">傻壮15</div>
+        <li></li>
+        <div class="move">傻壮16</div>
+
+    </ul>
+    <script>
+        var len=$('ul li').length;
+        var width=$('ul li').eq(0).width();
+        var height=$('ul li').eq(0).height();
+        var outwidth=$('ul li').eq(0).outerWidth();
+        var outheight=$('ul li').eq(0).outerHeight();
+        // console.log(width,height);
+        var ul_width=$('ul').width();
+        var ul_height=$('ul').height();
+        var screen_width=$(window).width();
+        var num=Math.ceil(screen_width/outwidth);
+        var avg=screen_width/num;
+        // console.log(outheight);
+        var lock=true;
+        var flag=true;
+
+
+        $('ul li').each(function(i){
+            var left=$(this).offset().left;
+            var top=$(this).offset().top;
+            $(this).css({
+                'left':left,
+                'top':top
+            });
+
+            $(this).next().css({
+                'width':width,
+                'height':height,
+                'left':left+10,
+                'top':top+10,
+                'line-height':'30px',
+                'text-align':'center'
+            });
+        });
+
+        $('ul li').each(function(){
+            $(this).css({
+                'position':'absolute'
+            });
+        });
+        
+        //当鼠标按下，还没抬起的那一刻
+        $('ul li').each(function(){
+            $(this).next().on('touchstart',function(e){
+                if(e.originalEvent.changedTouches.length>1) return;
+                e.preventDefault();
+                var self=$(this);
+                var x1=e.originalEvent.changedTouches[0].clientX;
+                var y1=e.originalEvent.changedTouches[0].clientY;
+                var myNum=($(this).prev().index())/2;
+                // console.log(myNum);
+                var left1=$(this).prev().offset().left;
+                var top1=$(this).prev().offset().top;
+                var dis_x=x1-left1;
+                var dis_y=y1-top1;
+                var last;
+                
+                $(this).prev().addClass('temp');
+
+                $(this).on('touchmove',function(e){
+                    e.preventDefault();
+                    var x2=e.originalEvent.changedTouches[0].clientX;
+                    var y2=e.originalEvent.changedTouches[0].clientY;
+                    $(this).css({
+                    'left':x2-dis_x+10,
+                    'top':y2-dis_y+10,
+                    'position':'absolute'
+                    });
+                    // console.log(Math.ceil(x2/avg));
+                    var bili_x=Math.ceil(x2/avg)-1;
+                    var bili_y=Math.ceil(y2/outheight)-1;
+                    var index=num*bili_y+bili_x;
+                    if(index<len && lock && index!=myNum){
+                        lock=false;
+                        var l1=$('ul li').eq(index).offset().left;
+                        var t1=$('ul li').eq(index).offset().top;
+                        var l2=$('.temp').offset().left;
+                        var t2=$('.temp').offset().top;
+                        console.log(l2,t2);
+
+                        $('.temp').css({
+                            'left':l1,
+                            'top':t1
+                        });
+
+                        $('ul li').eq(index).css({
+                        'left':l2,
+                        'top':t2
+                        });
+
+                        $('ul li').eq(index).next().animate({
+                            'left':l2+10,
+                            'top':t2+10
+                        },'slow',function(){
+                            lock=true;
+                        });
+
+                        // if(!last){
+                        //     var l1=$('ul li').eq(index).offset().left;
+                        //     var t1=$('ul li').eq(index).offset().top;
+                        //     $('ul li').eq(index).css({
+                        //     'left':l2+10,
+                        //     'top':t2+10
+                        //     });
+                        // }else{
+                        //     var l1=$('ul li').eq(last).offset().left;
+                        //     var t1=$('ul li').eq(last).offset().top;
+                        //     $('ul li').eq(last).css({
+                                
+                        //         'left':l2+10,
+                        //         'top':t2+10
+                        //     });
+                        // }
+
+                        // $('.temp').css({
+                        //     'left':l1,
+                        //     'top':t1
+                        // });
+
+                        // $('ul li').eq(last).next().animate({
+                        //     'left':l2+10,
+                        //     'top':t2+10
+                        // },'slow',function(){
+                        //     lock=true;
+                        // });
+
+                        // last=index;
+
+                    }
+                    // console.log(index);
+                });
+
+                $(this).on('touchend',function(){
+                    $(this).off('touchmove');
+                    $(this).off('touchend');
+
+                    var l=$('.temp').offset().left;
+                    var t=$('.temp').offset().top;
+                    // console.log(l,t);
+
+                    $(this).css({
+                        'left':l+10,
+                        'top':t+10
+                    });
+
+
+                });
+            });
+
+
+        })
+
+
+
+            
+
+
+        //     //当鼠标按下之后在document上移动的时候
+        //     $(this).on('touchmove',function(e){
+        //         // if(!lock) return;
+        //         if(e.originalEvent.changedTouches.length>1) return;
+        //         // console.log(e)
+        //         var x2=e.originalEvent.changedTouches[0].clientX;
+        //         var y2=e.originalEvent.changedTouches[0].clientY;
+        //         var bili_x=Math.ceil(x2/li_width)-1;
+        //         var bili_y=Math.ceil(y2/li_height)-1;
+        //         var n=num*bili_y+bili_x;
+        //         if(n<len){
+                    
+        //             // console.log(n);
+        //             if(n==0 && myNum==0){
+        //                 //
+        //             }
+        //             else if(n==0 && myNum!=n){
+        //                 $('ul').prepend(self.parent());
+        //                 myNum=$('.temp').index();
+        //             }
+        //             else{
+
+
+        //                 if(n>myNum){
+        //                     // console.log('上');
+        //                     // if(n+1==len){
+        //                     //     $('ul').append(self.parent());
+        //                     // }else{
+        //                     //     $('ul li').eq(n+1).before(self.parent());
+        //                     // }
+
+        //                     // self.parent().css({
+        //                     //     'width':0
+        //                     // });
+
+        //                     // self.parent().stop().animate({
+        //                     //     'width':avg
+        //                     // },'slow',function(){
+        //                     //     lock=true;
+        //                     // });
+
+        //                     // myNum=$('.temp').index();
+        //                 }else{
+        //                     // console.log('下');
+        //                     // 
+
+        //                     if(n!=myNum && lock){
+        //                         flag=false;
+        //                         lock=false;
+        //                         var left2=$('ul li').eq(n).offset().left;
+        //                         var top2=$('ul li').eq(n).offset().top;
+        //                         // console.log(left2,top2);
+        //                         self.parent().css({
+        //                             'left':left2,
+        //                             'top':top2
+        //                         });
+        //                         may_x=left1-left2;
+
+        //                         self.css({
+        //                         'left':dis_x,
+        //                         'top':dis_y
+        //                         });
+
+        //                         // self.css({
+        //                         //     'left':0,
+        //                         //     'top':0
+        //                         // });
+
+
+        //                         $('ul li').eq(n).animate({
+        //                             'left':left1,
+        //                             'top':top1
+        //                         },function(){
+        //                             lock=true;
+        //                             flag=true;
+        //                         })
+
+        //                         $('ul li').eq(n-1).after(self.parent());
+        //                     }
+
+        //                     myNum=$('.temp').index();
+        //                 }
+
+        //                 // console.log(1);
+
+        //             }
+        //             // console.log(n,myNum);
+        //         }
+
+        //         if(flag){
+        //             console.log(1);
+        //             self.css({
+        //             'left':x2-x1+may_x,
+        //             'top':y2-y1
+        //             });
+        //         }
+
+                
+        //         e.preventDefault();
+        //     });
+
+        //     $(this).on('touchend',function(){
+        //         $(this).off('touchmove');
+        //         $(this).off('touchend');
+        //         // self.attr('style','');
+        //         self.parent().removeClass('temp');
+
+        //     });
+        // });
+    </script>
+</body>
+</html>

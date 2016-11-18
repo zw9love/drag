@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{
+        padding: 0;
+        margin:0;
+        list-style: none;
+    }
+    body,html{
+        height:100%;
+    }
+    ul{
+        width:100%;
+        position: relative;
+        overflow: hidden;
+    }
+    ul li{
+        width:12.5%;
+        box-sizing:border-box;
+        border:10px solid #fff;
+        float: left;
+        cursor: pointer;
+    }
+
+    .move{
+        width:100%;
+        padding-top:100%;
+        background:yellowgreen;
+        z-index: 1;
+    }
+    .hide{
+        width:100%;
+        padding-top:100%;
+        display: none;
+    }
+
+
+    </style>
+    <script src="js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <ul>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+                <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+        <li>
+           <div class="move"></div>
+           <div class="hide"></div>
+        </li>
+  
+
+    </ul>
+    <script>
+        var len=$('ul li').length;
+        var width=$('ul li .move').width();
+        var height=$('ul li .move').innerHeight();
+        var li_width=$('ul li').outerWidth();
+        var li_height=$('ul li').outerHeight();
+        var ul_width=$('ul').width();
+        var ul_height=$('ul').height();
+
+
+        // $('ul li').each(function(){
+        //     // $(this).text($(this).offset().left+','+$(this).offset().top);
+        //     $(this).css({
+        //         'left':$(this).offset().left,
+        //         'top':$(this).offset().top
+        //     });
+        // });
+        // $('ul li').each(function(){
+        //     $(this).css({
+        //         'position':'absolute'
+        //     });
+        // });
+        
+        //当鼠标按下，还没抬起的那一刻
+        $('ul li .move').on('mousedown',function(e){
+
+            var self=$(this);
+            var x1=e.clientX;
+            var y1=e.clientY;
+            var l=$(this).parent().offset().left;
+            var t=$(this).parent().offset().top;
+            var dis_x=x1-l;
+            var dis_y=y1-t;
+            var myNum=$(this).parent().index();
+            $(this).css({
+                'z-index':2,
+                'width':width,
+                'height':height,
+                'padding-top':0,
+                'left':l+10,
+                'top':t+10,
+                'position':'absolute'
+            });
+
+            $(this).parent().addClass('temp');
+
+            $(this).siblings('.hide').css({
+                'display':'block'
+            });
+
+            //当鼠标按下之后在document上移动的时候
+            $(document).on('mousemove',function(e){
+                var x2=e.clientX;
+                var y2=e.clientY;
+                var bili_x=Math.ceil(x2/li_width)-1;
+                var bili_y=Math.ceil(y2/li_height)-1;
+                var n=8*bili_y+bili_x;
+                if(n<len){
+                    // console.log(n);
+                    if(n==0 && myNum==0){
+                        //
+                    }
+                    else if(n==0 && myNum!=n){
+                        $('ul').prepend(self.parent());
+                        myNum=$('.temp').index();
+                    }
+                    else{
+
+                        if(n>myNum){
+                            // console.log('上');
+                            if(n+1==len){
+                                $('ul').append(self.parent());
+                            }else{
+                            $('ul li').eq(n+1).before(self.parent());
+                            }
+                            myNum=$('.temp').index();
+                        }else{
+                            // console.log('下');
+                            $('ul li').eq(n-1).after(self.parent());
+                            myNum=$('.temp').index();
+                        }
+                    
+                    }
+                    // console.log(n,myNum);
+                }
+
+                self.css({
+                    'left':x2-dis_x+10,
+                    'top':y2-dis_y+10
+                });
+                e.preventDefault();
+            });
+
+            $(document).on('mouseup',function(){
+                $(document).off('mousemove');
+                $(document).off('mouseup');
+                self.siblings('.hide').css({
+                    'display':'none'
+                });
+                self.attr('style','');
+                self.parent().removeClass('temp');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <style>
+    *{
+        margin:0;
+        padding-top: 0;
+    }
+    body{
+        perspective:500px;
+        overflow: hidden;
+
+    }
+    /*.contain{
+        height: 50px;
+        transform:rotateY(180deg);
+        -webkit-transform:rotateY(180deg);
+        float: left;
+    }*/
+    .test{
+/*        width:100%;
+        height: 50px;
+        background: red;
+        color:#fff;
+        font-size:20px;
+        text-align: center;
+        line-height: 50px;
+        transform:rotateY(180deg);
+        -webkit-transform:rotateY(180deg);*/
+        width:0px;
+        height: 100px;
+        float: left;
+        /*margin-left:100px;*/
+        /*margin-left:10px;*/
+        background: yellowgreen;
+
+    }
+    </style>
+</head>
+<body>
+    <div id="test" style="float:left;width:0px;height:100px;background:red;margin-left:20px"></div>
+    <div class="test"></div>
+<!--     <div class="contain">
+        <div class="test">2</div>
+    </div>
+    <div style="width:200px;height:50px;float:left;background:yellow;"></div>
+    <div style="width:200px;height:50px;float:left;background:green;"></div> -->
+    <script>
+    // $('.test').hover(function(){
+    //     $(this).stop().animate({
+    //         'width':0,
+    //         'margin-left':-100
+    //     })
+    // },function(){
+        $('.test').stop().animate({
+            'width':100
+            
+        });
+        $('#test').stop().animate({
+            'width':100
+            
+        })
+    // });
+    // $('.contain').animate({
+    //     'width':800
+    // },3000);
+    </script>
+</body>
+</html>

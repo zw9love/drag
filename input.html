@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    *{
+        margin: 0;
+        padding:0;  
+        top:0;
+    }
+    html,body{
+        height: 100%;
+        /*overflow: hidden;*/
+    }
+    input{
+        width:200px;
+        height: 30px;
+        outline: none;
+        line-height: 30px;
+        text-align: center;
+        position: absolute;
+        left:50%;
+        top: 100%;
+        transform:translate(-50%,-100%);
+        -webkit-transform:translate(-50%,-100%);
+    }
+    </style>
+</head>
+<body>
+    <input type="text" placeholder="请输入">
+    <script>
+     var width=document.documentElement.clientWidth||document.body.clientWidth;
+     var height=document.documentElement.clientHeight||document.body.clientHeight;
+     // document.body.style.width=width+'px';
+     // document.body.style.height=height+'px';
+    </script>
+</body>
+</html>
