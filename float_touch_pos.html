@@ -35,7 +35,9 @@
         position:absolute;
     }
 
-
+    .top{
+        z-index: 100;
+    }
 
 
 
@@ -133,6 +135,7 @@
         $('.move').on('touchstart',function(e){
             if(e.originalEvent.changedTouches.length>1) return;
             e.preventDefault();
+            $(this).addClass('top').siblings().removeClass('top');
             var x1=e.originalEvent.changedTouches[0].clientX;
             var y1=e.originalEvent.changedTouches[0].clientY;
             var myNum=$(this).attr('num');
@@ -142,7 +145,7 @@
             var l2,t2;
             var dis_x=x1-l1;
             var dis_y=y1-t1;
-            $(this).addClass('temp');
+            //$(this).addClass('temp');
             // console.log(l1,t1);
             $(this).on('touchmove',function(e){
                 e.preventDefault();
